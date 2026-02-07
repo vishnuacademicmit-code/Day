@@ -45,7 +45,7 @@ const typewriterText = document.getElementById('typewriter-text');
 const homeBtn = document.querySelector('.home-btn');
 const cursorTarget = document.getElementById('cursor-target');
 
-const message = "Happy Birthday, \nFor the special person, For the girl I once knew, and For the strong woman I see now.\n\nWishing you a year filled with meaningful memories, and gentle wins along the way… and somewhere along the way, a secret admirer cheering for you.\n\nOnce again Happy Birthday\nSilpha Miss 😉";
+const message = "Happy Birthday, \nFor the special person, For the girl I once knew, and For the strong woman I see now.\n\nWishing you a year filled with meaningful memories and gentle wins along the way.Hope this year gives you plenty of moments where you just smile and think, yeah…\n\nOnce again Happy Birthday\nSilpha Miss 😉";
 
 function openScroll() {
     // Vertical Unroll Trigger
@@ -109,3 +109,4 @@ function finishAnimation() {
         setTimeout(() => homeBtn.style.opacity = '1', 100);
     }, 1000);
 }
+
