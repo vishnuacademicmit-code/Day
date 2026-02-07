@@ -1,0 +1,351 @@
+:root {
+    --bg-color: #000000;
+    --text-color: #fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    /* Cursor is managed by canvas or default */
+}
+
+/* The content is hidden by the canvas overlay */
+.container {
+    text-align: center;
+    z-index: 1;
+    /* Below the canvas */
+    padding: 20px;
+    pointer-events: none;
+    /* Let clicks pass through to canvas if needed, or vice-versa */
+}
+
+.message-container {
+    opacity: 1;
+}
+
+.happy-birthday {
+    font-family: 'Dancing Script', cursive;
+    font-size: 6rem;
+    color: #ffd700;
+    /* Gold text looks better on black */
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    /* Glowing text */
+}
+
+.wish-text {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-top: 20px;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.instruction {
+    font-size: 1rem;
+    color: #888;
+    margin-top: 40px;
+    font-weight: 500;
+}
+
+/* Canvas Overlay (The Dark Mask) */
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    cursor: crosshair;
+    pointer-events: none;
+    /* Allow clicks to pass through to buttons */
+}
+
+/* Canvas Particles (Sparkles & Fireflies - No Trails) */
+#canvas-particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    /* Above mask */
+    pointer-events: none;
+    /* Let interactions pass to mask canvas */
+}
+
+/* Mute Button */
+.mute-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 20;
+    /* Above canvas */
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.mute-btn:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+/* 
+   Moon Phase: Waxing Gibbous (Feb 11, 2003) 
+   ~75% Illuminated
+*/
+.moon {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: transparent;
+    z-index: 15;
+    /* Above canvas (10) to be a light source */
+    pointer-events: none;
+    /* Let clicks pass through if over moon */
+
+    /* 
+       To create a Gibbous shape in CSS:
+       1. Base circle (Moon)
+       2. Shadow/Mask to hide part of it? 
+       Actually, `box-shadow` on a spherical object is easier for crescent.
+       For Gibbous, it's tricker. 
+       
+       Simpler visual hack: 
+       A white circle + A skewed dark circle overlay?
+       
+       Let's use a specialized box-shadow trick for Waxing Gibbous.
+    */
+    background-color: transparent;
+    box-shadow: 15px 0 0 0 #f6f1d5;
+    /* The lit part offset */
+
+    /* 
+       Wait, box-shadow alone makes a crescent.
+       Let's try a simpler approach: A white circle, with a dark distinct shadow oval?
+       
+       Better approach for realistic "Moon":
+       Use an image or a complex gradient.
+       
+       CSS Only Waxing Gibbous:
+       The moon is a circle. 
+       Left side is flat/bulging out.
+    */
+
+    /* Resetting to a cleaner approach for Gibbous */
+    background: #f6f1d5;
+    box-shadow: 0 0 20px #f6f1d5, 0 0 40px rgba(246, 241, 213, 0.2);
+}
+
+/* Mask to shape it into Gibbous */
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #000;
+    /* Match sky */
+    opacity: 0.8;
+    transform: translateX(-40%);
+    /* Slide dark circle left to leave >50% visible */
+    filter: blur(2px);
+    /* Soften the terminator line */
+    mix-blend-mode: normal;
+}
+
+/* Wait, painting black on top might block stars. 
+   Better to just imply it or use clipped shapes. 
+   
+   Actually, for a birthday wish, a full glistening moon is often nicer.
+   But user asked SPECIFICALLY for Feb 11, 2003 (Waxing Gibbous).
+   
+   Let's do this:
+   1. The moon is a white circle.
+   2. We place a semi-transparent black oval on the LEFT side to shadow it.
+*/
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    border-radius: 50%;
+    filter: blur(4px);
+}
+
+/* Sky Atmosphere */
+#sky-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 12;
+    /* Above canvas (10), Below Moon (15) */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Clouds */
+.cloud {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    opacity: 0.6;
+    filter: blur(20px);
+    animation: floatCloud 60s linear infinite;
+}
+
+@keyframes floatCloud {
+    from {
+        transform: translateX(100vw);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+/* Background Stars */
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite ease-in-out;
+    opacity: 0.8;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* CSS Gift Box */
+.gift-box-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+
+.gift-box {
+    width: 100px;
+    height: 80px;
+    background: #e74c3c;
+    /* Red Box */
+    position: absolute;
+    bottom: 0;
+    border-radius: 0 0 5px 5px;
+    box-shadow: inset 0 -10px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.gift-lid {
+    width: 110px;
+    height: 25px;
+    background: #c0392b;
+    /* Darker Red Lid */
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+/* Ribbons */
+.gift-ribbon-vertical {
+    width: 20px;
+    height: 100%;
+    background: #f1c40f;
+    /* Gold */
+    position: absolute;
+    left: 40px;
+}
+
+.gift-ribbon-horizontal {
+    width: 100%;
+    height: 20px;
+    background: #f1c40f;
+    /* Gold */
+    position: absolute;
+    top: 30px;
+}
+
+/* Bows */
+.gift-bow-left,
+.gift-bow-right {
+    width: 30px;
+    height: 30px;
+    border: 5px solid #f1c40f;
+    border-radius: 50% 50% 0 50%;
+    position: absolute;
+    top: -25px;
+    z-index: 1;
+}
+
+.gift-bow-left {
+    left: 15px;
+    transform: rotate(45deg);
+}
+
+.gift-bow-right {
+    right: 15px;
+    transform: rotate(-45deg) scaleX(-1);
+    border-radius: 50% 50% 50% 0;
+}
+
+/* Animation Container */
+.floating-gift {
+    animation: floatGift 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.floating-gift:active {
+    transform: scale(0.9) !important;
+}
+
+@keyframes floatGift {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-15px) rotate(2deg);
+    }
+}

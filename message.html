@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="message.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Reuse Mood Elements -->
+    <div class="moon"></div>
+    <div id="sky-container"></div>
+    <div id="canvas-particles"></div>
+
+    <div class="message-stage">
+        <div id="scroll-container">
+            <div class="scroll-top-handle"></div>
+            <div class="scroll-body">
+                <div class="scroll-content">
+                    <p id="typewriter-text"><span id="cursor-target"></span></p>
+                </div>
+            </div>
+            <div class="scroll-bottom-handle"></div>
+        </div>
+
+
+    </div>
+
+    <!-- Background Music (Continue playing) -->
+    <audio id="bg-music" loop>
+        <source src="music/song.mp3" type="audio/mpeg">
+    </audio>
+    <button id="mute-btn" class="mute-btn">🔊</button>
+
+    <a href="index.html" class="home-btn" style="display:none; opacity:0;">Return Home</a>
+
+    <script src="message.js"></script>
+</body>
+
+</html>

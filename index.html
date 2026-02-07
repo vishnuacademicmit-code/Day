@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Wish</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Start Overlay for Audio Autoplay -->
+    <div id="start-overlay" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: black;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-family: 'Poppins', sans-serif;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: opacity 0.8s ease;
+    ">
+        <div class="gift-box-container floating-gift">
+            <div class="gift-box">
+                <div class="gift-ribbon-vertical"></div>
+                <div class="gift-ribbon-horizontal"></div>
+            </div>
+            <div class="gift-lid">
+                <div class="gift-bow-left"></div>
+                <div class="gift-bow-right"></div>
+            </div>
+        </div>
+        <div style="margin-top: 30px;">Tap to Open 🎁</div>
+        <div style="margin-top: 30px;">try to open in 💻</div>
+    </div>
+
+    <!-- Moon Phase: Waxing Gibbous (Feb 11, 2003) -->
+    <div class="moon"></div>
+
+    <!-- Sky Atmosphere (Clouds & Background Stars) -->
+    <div id="sky-container"></div>
+
+    <!-- Canvas 1: The Dark Mask & Reveal (Bottom) -->
+    <canvas id="canvas"></canvas>
+    <!-- Canvas 2: The Sparkles & Fireflies (Top) -->
+    <canvas id="canvas-particles"></canvas>
+
+    <div class="container">
+        <div class="message-container">
+            <h1 class="happy-birthday">Happy Birthday Dear<br>Silpha Miss 😉</h1>
+            <p class="wish-text">Wishing you a day filled with love, laughter, and light!</p>
+
+            <br>
+            <a href="gallery.html" style="
+                display: inline-block;
+                margin-top: 20px;
+                color: #ffd700;
+                text-decoration: none;
+                border: 1px solid #ffd700;
+                padding: 10px 20px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                pointer-events: auto; 
+                z-index: 100;
+                position: relative;
+                transition: all 0.3s;
+            " onmouseover="this.style.background='#ffd700'; this.style.color='black'"
+                onmouseout="this.style.background='transparent'; this.style.color='#ffd700'">
+                📸 View Memories
+            </a>
+
+            <p class="instruction">(Make some sparks ✨)</p>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <!-- Audio Element -->
+    <audio id="bg-music" loop preload="auto" autoplay>
+        <source src="music/song.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Mute/Unmute Button -->
+    <button id="mute-btn" class="mute-btn">🔊</button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
